@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+    <style>
+      table tbody th {
+        text-align: center;
+      }
+      table th {
+        padding-left: 10px;
+        padding-right: 10px;
+        color: #717171;
+        font-weight: 400;
+        background: rgba(245, 245, 245, 0.7);
+      }
+      table th,
+      table td {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        text-align: center;
+        word-break: keep-all;
+        word-wrap: break-word;
+        border: 1px solid #dfdfdf;
+      }
+      input[type="text"] {
+        margin: 0px 5px 0px 5px;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+      }
+      #example {
+        width: 300px;
+      }
+      #title {
+        width: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="section">
+      <table>
+        <colgroup>
+          <col style="width: 100px" />
+          <col style="width: 150px" />
+          <col style="width: 150px" />
+          <col style="width: 368px" />
+          <col style="width: 140px" />
+          <col style="width: 140px" />
+          <col style="width: 180px" />
+          <col style="width: 140px" />
+        </colgroup>
+        <tbody id="header">
+          <th>NO</th>
+          <th>항목명</th>
+          <th>단위입력</th>
+          <th>플레이스 홀더 문구 입력</th>
+          <th>필수/선택</th>
+          <th>순서 변경</th>
+          <th>답변 입력 양식</th>
+          <th>답변 설정</th>
+          <tr>
+            <!-- 첫번째 줄 시작 -->
+            <!-- 첫번째 줄 끝 -->
+          </tr>
+        </tbody>
+        <tbody id="template"></tbody>
+      </table>
+      <div style="padding-top: 15px">
+        <button type="button" class="btn btn-primary-line" onclick="addRow()">
+          +
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary-line"
+          onclick="deleteRow(-1)"
+        >
+          -
+        </button>
+      </div>
+    </div>
+  </body>
+  <script>
+    function addRow() {
+      // table element 찾기
+      const table = document.getElementById("template");
+      var trCnt = table.childElementCount + 1;
+      var inner = "";
+      console.log(trCnt);
+      // 새 행(Row) 추가
+      const newRow = table.insertRow();
+      newRow.id = "tr_" + trCnt;
+
+      // 새 행(Row)에 Cell 추가
+      const newCell1 = newRow.insertCell(0);
+      const newCell2 = newRow.insertCell(1);
+      const newCell3 = newRow.insertCell(2);
+      const newCell4 = newRow.insertCell(3);
+      const newCell5 = newRow.insertCell(4);
+      const newCell6 = newRow.insertCell(5);
+      const newCell7 = newRow.insertCell(6);
+      const newCell8 = newRow.insertCell(7);
+
+      let first = `<div id="${trCnt}" > ${trCnt} </div>`;
+      let second = "<input type='text' />";
+      let third = "<input type='text' placeholder='단위를 입력해주세요' />";
+      let forth =
+        "<input type='text' id='example' placeholder='에시문구를 입력해주세요' />";
+      let fifth = ` <div>
+              <input type="radio" id="neccesery${trCnt}" name="select${trCnt}" value="neccesery" onclick="radioNecClick(event)" />
+              <label for="neccesery${trCnt}">필수</label>
+              <input type="radio" id="select${trCnt}" name="select${trCnt}" value="select" onclick="radioSelClick(event)"  />
+              <label for="select${trCnt}">선택</label>
+            </div>`;
+      let sixth = `
+       <button type="button" class="btn btn-primary-line" onclick="moveUP(event)" >▲</button>
+       <button type="button" class="btn btn-primary-line" onclick="moveDOWN(event)" >▼</button>
+    `;
+      let seventh = ` <div>
+              <input type="radio" id="write${trCnt}" name="name${trCnt}" value="write" onclick="radioWriteClick(${trCnt})" />
+              <label for="write${trCnt}">주관식</label>
+              <input type="radio" id="pick${trCnt}" name="name${trCnt}" value="multiple" onclick="radioPickClick(${trCnt})" />
+              <label for="pick${trCnt}">객관식</label>
+            </div>`;
+      let eighth = `<div id="pop${trCnt}" style="display: none" onclick= "popup()"> <button type="button" class="btn btn-primary-line" onclick="moveUP(event)" >설정하기</button> </div>`;
+      newCell1.innerHTML = first;
+      newCell2.innerHTML = second;
+      newCell3.innerHTML = third;
+      newCell4.innerHTML = forth;
+      newCell5.innerHTML = fifth;
+      newCell6.innerHTML = sixth;
+      newCell7.innerHTML = seventh;
+      newCell8.innerHTML = eighth;
+    }
+    function deleteRow(rownum) {
+      // table element 찾기
+      const table = document.getElementById("template");
+
+      // 행(Row) 삭제
+      const newRow = table.deleteRow(rownum);
+    }
+    function moveUP(event) {
+      let num = event.target.parentElement.parentElement.id;
+      let rowCount = event.target.parentElement.parentElement.rowIndex;
+      let trCnt = parseInt(num.substr(3));
+      let downNum = trCnt - 1;
+      const table = document.getElementById("template");
+      const template = document.getElementById("defaultTemplate");
+      console.log(table.rows, "행열");
+      const upTable = document.getElementById("tr_" + trCnt);
+      const downTable = document.getElementById("tr_" + downNum);
+      console.log("template");
+      // 노드 복사하기 (deep copy)
+      const upNode = upTable.cloneNode(true);
+      const downNode = downTable.cloneNode(true);
+      upNode.id = "cr_" + trCnt;
+      downNode.id = "cr_" + downNum;
+      // 복사된 Node id 변경하기
+      // 복사한 노드 붙여넣기
+      upTable.after(downNode);
+      upTable.after(upNode);
+      table.deleteRow(trCnt - 2);
+      table.deleteRow(trCnt - 2);
+      upNode.id = "tr_" + downNum;
+      upNode.cells[0].children[0].id = downNum;
+      upNode.cells[0].children[0].innerText = downNum;
+      downNode.id = "tr_" + trCnt;
+      downNode.cells[0].children[0].id = trCnt;
+      downNode.cells[0].children[0].innerText = trCnt;
+    }
+    function moveDOWN(event) {
+      let num = event.target.parentElement.parentElement.id;
+      let trCnt = parseInt(num.substr(3));
+      const template = document.getElementById("defaultTemplate");
+      let downNum = trCnt + 1;
+      const table = document.getElementById("template");
+      const upTable = document.getElementById("tr_" + trCnt);
+      const downTable = document.getElementById("tr_" + downNum);
+
+      // 노드 복사하기 (deep copy)
+
+      const upNode = upTable.cloneNode(true);
+      const downNode = downTable.cloneNode(true);
+      // 복사된 Node id 변경하기
+      upNode.id = "cr_" + trCnt;
+      downNode.id = "cr_" + downNum;
+
+      // 복사한 노드 붙여넣기
+      downTable.after(upNode);
+      downTable.after(downNode);
+      table.deleteRow(trCnt - 1);
+      table.deleteRow(trCnt - 1);
+
+      upNode.id = "tr_" + downNum;
+      upNode.cells[0].children[0].id = downNum;
+      upNode.cells[0].children[0].innerText = downNum;
+      downNode.id = "tr_" + trCnt;
+      downNode.cells[0].children[0].id = trCnt;
+      downNode.cells[0].children[0].innerText = trCnt;
+    }
+
+    function radioWriteClick(num) {
+      const pop = document.getElementById("pop" + num);
+      pop.style.display = "none";
+    }
+    function radioPickClick(num) {
+      const pop = document.getElementById("pop" + num);
+      pop.style.display = "";
+    }
+    function radioNecClick(event) {
+      let num = event.target.parentElement.parentElement.parentElement.id;
+      let trCnt = parseInt(num.substr(3));
+      let tr = document.getElementById("tr_" + trCnt);
+      tr.style.backgroundColor = "#b9b4b4";
+    }
+    function radioSelClick(event) {
+      let num = event.target.parentElement.parentElement.parentElement.id;
+      let trCnt = parseInt(num.substr(3));
+      let tr = document.getElementById("tr_" + trCnt);
+      tr.style.backgroundColor = "";
+    }
+    async function useDefault() {
+      const table = document.getElementById("defaultTemplate");
+      const table2 = document.getElementById("template").childElementCount;
+      table.style.display = "";
+      var trCnt = document.getElementById("template").childElementCount;
+      console.log(trCnt, "행수");
+      const basic = document.getElementById("tr_1");
+      if (trCnt > 0) {
+        await loop(trCnt);
+      }
+    }
+    const loop = (length) => {
+      const table2 = document.getElementById("template");
+      for (let i = 0; i < length; i++) {
+        table2.childNodes[i].id = "tr_" + (i + 4);
+        console.log(table2.rows[i].cells[0].children[0]);
+        table2.rows[i].cells[0].children[0].id = i + 4;
+        table2.rows[i].cells[0].children[0].innerText = i + 4;
+      }
+    };
+    async function deleteDefault() {
+      // table element 찾기
+      const table = document.getElementById("defaultTemplate");
+      table.style.display = "none";
+      var trCnt = document.getElementById("template").childElementCount;
+      if (trCnt > 0) {
+        await deletLoop(trCnt);
+      }
+    }
+    const deletLoop = (length) => {
+      const table2 = document.getElementById("template");
+      for (let i = 0; i < length; i++) {
+        table2.childNodes[i].id = "tr_" + (i + 1);
+        table2.rows[i].cells[0].children[0].id = i + 1;
+        table2.rows[i].cells[0].children[0].innerText = i + 1;
+      }
+    };
+  </script>
+</html>

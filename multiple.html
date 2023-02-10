@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <style>
+    table tbody th {
+      text-align: center;
+    }
+    table th {
+      padding-left: 10px;
+      padding-right: 10px;
+      color: #434242;
+      font-weight: 400;
+      background: rgba(245, 245, 245, 0.7);
+    }
+    table th,
+    table td {
+      padding-top: 8px;
+      padding-bottom: 8px;
+      text-align: center;
+      word-break: keep-all;
+      word-wrap: break-word;
+      border: 1px solid #dfdfdf;
+    }
+    input[type="text"] {
+      margin: 0px 5px 0px 5px;
+      -webkit-transition: 0.5s;
+      transition: 0.5s;
+    border: solid 1px #dfdfdf;
+    padding: 5px;
+    background: #fff;
+    border-radius: 8px;
+    width: 300px;
+    }
+     input::placeholder {
+		 color: rgb(206, 206, 206);
+      }
+    table{
+ border-collapse:collapse;
+}
+  </style>
+  <body>
+    <h2>설정하기</h2>
+    <label for="multiple-select">답변수 설정:</label>
+
+    <select name="num" id="multiple-select"  onchange="changeValue(this)">
+      <option value="">--답변수 설정--</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+    <button onclick="removeAll()">새로쓰기</button>
+        <table id="template">
+            <colgroup>
+                <col style="width: 100px" />
+                <col style="width: 340px" />
+                <tbody id="multiple">
+                  <th>NO</th>
+                  <th>답변입력</th>
+                </tbody>
+                <tbody id="multipleSelect">
+                
+                <tr id="1" style="display: none;">
+                  <td >
+                    1
+                  </td>
+                  <td>
+                    <input type="text" placeholder="답변을 입력해주세요." />
+                  </td>
+                </tr>
+                <tr id="2" style="display: none;">
+                  <td>
+                    2
+                  </td>
+                  <td>
+                    <input type="text" placeholder="답변을 입력해주세요." />
+                  </td>
+                </tr>
+                <tr id="3" style="display: none;">
+                  <td>
+                    3
+                  </td>
+                  <td>
+                    <input type="text" placeholder="답변을 입력해주세요." />
+                  </td>
+                </tr>
+                <tr id="4" style="display: none;">
+                  <td>
+                    4
+                  </td>
+                  <td>
+                    <input type="text" placeholder="답변을 입력해주세요." />
+                  </td>
+                </tr>
+                <tr id="5" style="display: none;">
+                  <td>
+                    5
+                  </td>
+                  <td>
+                    <input type="text" placeholder="답변을 입력해주세요." />
+                  </td>
+                </tr>
+                <tr id="6" style="display: none;">
+                  <td>
+                    6
+                  </td>
+                  <td>
+                    <input type="text" placeholder="답변을 입력해주세요." />
+                  </td>
+                </tr>
+                <tr id="7" style="display: none;">
+                  <td>
+                    7
+                  </td>
+                  <td>
+                    <input type="text" placeholder="답변을 입력해주세요." />
+                  </td>
+                </tr>
+                <tr id="8" style="display: none;">
+                  <td>
+                    8
+                  </td>
+                  <td>
+                    <input type="text" placeholder="답변을 입력해주세요." />
+                  </td>
+                </tr>
+                <tr id="9" style="display: none;">
+                  <td>
+                    9
+                  </td>
+                  <td>
+                    <input type="text" placeholder="답변을 입력해주세요." />
+                  </td>
+                </tr>
+                <tr id="10" style="display: none;">
+                  <td>
+                    10
+                  </td>
+                  <td>
+                    <input type="text" placeholder="답변을 입력해주세요." />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button onclick="submitData()">제출하기</button>
+  </body>
+  <script>
+    const changeValue = async (target) => {
+        // 선택한 option의 value 값
+        console.log(target.value); 
+        const tbody = document.querySelector('tbody');
+        const td = document.getElementsByTagName('td');
+        const table = document.getElementById("multipleSelect");
+        const tr = document.querySelectorAll('tr');
+        for  ( let i = 0; i < 10 ; i++) {
+          let num =  parseInt(i) + 1;
+          const tab = document.getElementById(num);
+          tab.style.display = 'none'
+        }
+        await loop(target.value)
+    }
+    const  loop = (length) => {
+      for  ( let i = 0; i < length ; i++) {
+          let num =  parseInt(i) + 1;
+          const tab = document.getElementById(num);
+          tab.style.display = ''
+        }
+        
+      }
+      
+      const  removeAll = () => {
+        const tab = document.querySelectorAll('input');
+        for  ( let i = 0; i < 10 ; i++) {
+          tab[i].value = null
+        }
+        
+      }
+      
+      const submitData = () => {
+        const inputs = document.querySelectorAll('input');
+        const num = document.getElementById("multiple-select");
+        let arr = []
+        console.log(num.value,"결과")
+        for(let i = 0; i < num.value ; i++) {
+            console.log(i)
+            arr.push({ key: i+1, value: inputs[i].value })
+        }
+        console.log(arr , "결과")
+    }
+    
+
+  
+  </script>
+</html>
